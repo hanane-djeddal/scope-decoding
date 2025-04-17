@@ -1,6 +1,6 @@
 # scope-decoding
 
-This repository contains code for launching SCOPE unfaithful decoding methods.
+This repository contains code for launching SCOPE unfaithful sample generations, from the paper [SCOPE: A Self-supervised Framework for Improving Faithfulness in Conditional Text Generation](https://arxiv.org/abs/2502.13674)
 
 $y_t \sim p_{\theta}(\cdot | y_{<t}, x) + \alpha_t p_{\text{LM}}(\cdot | y_{<t}),$
 where $\alpha_t \in \{0, 1\}$ is a binary random variable that indicates whether the LM is used at time $t$.
@@ -30,4 +30,18 @@ For single task generation, it should work out of the box:
 
 ```bash
 python src/scope/launcher.py main_model.model_path="YOUR MODEL" noise_model.model_path="YOUR MODEL" generation.mixture_alpha=0.3 data.dataset_path="YOUR DATA" out_path=output
+```
+
+# Citation
+
+This code corresponds to the unfaithful generation introduced in this paper:
+```bibtex
+@inproceedings{
+duong2025scope,
+title={{SCOPE}: A Self-supervised Framework for Improving Faithfulness in Conditional Text Generation},
+author={Song Duong and Florian Le Bronnec and Alexandre Allauzen and Vincent Guigue and Alberto Lumbreras and Laure Soulier and Patrick Gallinari},
+booktitle={The Thirteenth International Conference on Learning Representations},
+year={2025},
+url={https://openreview.net/forum?id=dTkqaCKLPp}
+}
 ```
