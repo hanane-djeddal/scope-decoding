@@ -1,0 +1,9 @@
+main_model: {}
+noise_model: {}
+data: {}
+generation: {}
+
+# 2. Primitive Defaults
+mixture_mode: "hard"
+batch_size: 8
+out_path: "output"

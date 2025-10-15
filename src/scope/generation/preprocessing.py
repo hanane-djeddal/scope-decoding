@@ -26,10 +26,12 @@ class DataCollator:
         formatted_batch = []
         for x in batch:
             # truncate to max_length starting from the end
+            # print(x.keys())
+            # print(x[ids_key])
             if self.max_length is not None:
-                formated_prompt = x[ids_key][-self.max_length :]
+                formated_prompt = x[ids_key]["input_ids"][-self.max_length :]
             else:
-                formated_prompt = x[ids_key]
+                formated_prompt = x[ids_key]["input_ids"]
             input_dict = {"input_ids": formated_prompt}
 
             formatted_batch.append(input_dict)
@@ -48,7 +50,7 @@ class ExpertGuidedDataCollator:
 
     def __call__(self, batch):
         """Returns main input and noisy input, two dictionnaries with input_ids and labels"""
-        main_input = self.data_collator(batch)
+        main_input = self.data_collator(batch,ids_key="main_input_ids")
         noisy_inputs = self.data_collator(batch, ids_key="noise_input_ids")
 
         return main_input, noisy_inputs
@@ -82,7 +84,8 @@ def get_scope_dataloader(
         return_tensors="pt",
     )
 
-    if model_type == "mixture":
+    if model_type == "hard": #mixture
+        print("MIXTURE MODELS: using ExpertGuidedDataCollator")
         data_collator = ExpertGuidedDataCollator(data_collator)
 
     chunk_dataset = dataset.shard(num_shards=world_size, index=rank, contiguous=True)

@@ -28,11 +28,11 @@ class Generation:
 
 @dataclass
 class Config:
-    main_model: Model = field(Model)
-    data: Data = field(Data)
+    main_model: Model = Model
+    data: Data = Data
     noise_model: Optional[Model] = None
     mixture_mode: Optional[str] = "hard"
-    generation: Generation = field(Generation)
+    generation: Generation = Generation
 
     batch_size: int = 8
-    out_path: str
+    out_path: str = ""

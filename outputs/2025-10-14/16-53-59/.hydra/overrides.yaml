@@ -1,0 +1,5 @@
+- main_model.model_path=meta-llama/Llama-3.1-8B-Instruct
+- noise_model.model_path=meta-llama/Llama-3.1-8B-Instruct
+- generation.mixture_alpha=0.3
+- data.dataset_path=hanane/attributionbenchmark-scopeaugmented
+- out_path=fulltrainalpa3

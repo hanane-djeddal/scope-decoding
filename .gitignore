@@ -171,3 +171,7 @@ set_*.sh
 
 # env
 .env*
+
+
+# scripts_outputs
+*.out

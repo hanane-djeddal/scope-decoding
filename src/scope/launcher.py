@@ -1,7 +1,7 @@
 from pathlib import Path
 
 import hydra
-from datasets import load_from_disk
+from datasets import load_from_disk, load_dataset
 from hydra.core.config_store import ConfigStore
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
@@ -11,8 +11,11 @@ from scope.generation.distributed import distributed_generation
 from scope.generation.preprocessing import get_scope_dataloader
 from scope.utils import set_seed
 
+import os
+os.environ["HTTP_PROXY"] = "http://hacienda:3128"
+os.environ["HTTPS_PROXY"] = "http://hacienda:3128"
 
-@hydra.main(version_base=None, config_path="configs", config_name="config")
+@hydra.main(version_base=None, config_path="config", config_name="config")
 def main(cfg: Config):
     set_seed(cfg.get("seed", 1234))
     main_model = AutoModelForCausalLM.from_pretrained(cfg.main_model.model_path)
@@ -40,7 +43,7 @@ def main(cfg: Config):
     else:
         model = main_model
     # dataset should contain 2 columns: "main_text" and "noise_text"
-    dataset = load_from_disk(cfg.data.dataset_path)
+    dataset = load_dataset(cfg.data.dataset_path,split="train") #load_from_disk(cfg.data.dataset_path)
 
     def preprocess(x):
         x["main_input_ids"] = tokenizer(x["main_text"], truncation=False)
@@ -58,7 +61,7 @@ def main(cfg: Config):
     if cfg.data.max_samples is not None:
         print(f"Using {cfg.data.max_samples} samples")
         dataset = dataset.select(range(cfg.data.max_samples))
-    tmp_path = Path(cfg.out_path / "tmp")
+    tmp_path = Path(cfg.out_path )/ "tmp"
 
     distributed_generation(
         model=model,
